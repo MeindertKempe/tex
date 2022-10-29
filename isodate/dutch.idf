@@ -1,0 +1,127 @@
+%%
+%% This is file `french.idf',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% isodate.dtx  (with options: `language,french')
+%% 
+%%   isodate package
+%% 
+%%   Copyright  2000--2010 Harald Harders
+%% 
+%%   This program can be redistributed and/or modified under the terms
+%%   of the LaTeX Project Public License Distributed from CTAN
+%%   archives in directory macros/latex/base/lppl.txt; either
+%%   version 1 of the License, or any later version.
+%% 
+%%   h.harders@tu-bs.de
+%% 
+\ProvidesFile{dutch.idf}
+  [2010/01/03  v2.30  Language definitions for isodate package (HH)]
+\let\iso@languageloaded\active
+\typeout{Define commands for Dutch date format}
+\def\month@dutch{\ifcase\month\or
+  januari\or februari\or maart\or april\or mei\or juni\or
+  juni\or augustus\or september\or oktober\or november\or
+  december\fi}
+\def\iso@printmonthday@dutch#1#2{%
+  \ifthenelse{\equal{\iso@dateformat}{iso}\OR
+              \equal{\iso@dateformat}{TeX}}{%
+    \iso@printmonthday@int{#1}{#2}%
+  }{%
+    \ifthenelse{\equal{\iso@dateformat}{numeric}\OR
+                \equal{\iso@dateformat}{short}}{%
+      \ifiso@doprintday
+        \iso@printday{#2}/%
+      \fi
+      \iso@printmonth{#1}%
+    }{%
+      \ifthenelse{\equal{\iso@dateformat}{orig}\OR
+                  \equal{\iso@dateformat}{shortorig}}{%
+        \begingroup
+        \edef\lday{#2}\edef\day{\lday}%
+        \edef\lmonth{#1}\def\month{\lmonth}%
+        \ifiso@doprintday
+          \number\day\ifnum1=\day \noexpand\ier\fi\iso@monthsep
+        \fi
+        \month@dutch
+        \endgroup
+      }{}%
+    }%
+  }%
+}
+\def\iso@printdate@dutch#1#2#3{%
+  \ifthenelse{\equal{\iso@dateformat}{iso}\OR
+              \equal{\iso@dateformat}{TeX}}{%
+    \iso@printdate@int{#1}{#2}{#3}%
+  }{%
+    \iso@printmonthday@dutch{\number#2}{\number#3}%
+    \ifiso@printyear
+      \ifthenelse{\equal{\iso@dateformat}{orig}\OR
+                  \equal{\iso@dateformat}{shortorig}}{%
+      }{%
+        /%
+      }%
+      \ifthenelse{\equal{\iso@dateformat}{numeric}}{%
+        \iso@yearfour{\number#1}%
+      }{%
+        \ifthenelse{\equal{\iso@dateformat}{orig}}{%
+          \iso@yearsep\iso@yearfour{\number#1}%
+        }{%
+          \ifthenelse{\equal{\iso@dateformat}{shortorig}}{%
+            \iso@yearsep\iso@twodigitsign\iso@yeartwo{\number#1}%
+          }{%
+            \ifthenelse{\equal{\iso@dateformat}{short}}{%
+              \iso@yeartwo{\number#1}%
+            }{}%
+          }%
+        }%
+      }%
+    \fi
+  }%
+}
+\def\iso@datedutch{%
+  \def\today{\iso@printdate@dutch{\year}{\month}{\day}}}%
+\expandafter\def\csname iso@daterange@\CurrentOption\endcsname{%
+  \iso@daterange@dutch}%
+\def\iso@daterange@dutch#1#2#3#4#5#6{%
+  \ifthenelse{\equal{\iso@dateformat}{iso}\OR
+              \equal{\iso@dateformat}{TeX}}{%
+    \iso@daterange@int{#1}{#2}{#3}{#4}{#5}{#6}%
+  }{%
+    \ifthenelse{\equal{\number#1}{\number#4}}{%
+      \ifthenelse{\equal{\number#2}{\number#5}}{%
+        \ifiso@doprintday
+          \ifthenelse{\equal{\iso@dateformat}{orig}}{%
+            \begingroup
+            \edef\lday{#3}\edef\day{\lday}%
+            \number\day\ifnum1=\day \noexpand\ier\fi
+            \endgroup
+          }{%
+            \iso@printday{#3}%
+          }%
+        \else
+          \csname iso@printmonthday@\iso@languagename\endcsname{#2}{#3}%
+        \fi
+      }{%
+        \iso@printmonthday@dutch{#2}{#3}%
+      }%
+    }{%
+      \csname iso@printdate@\iso@languagename\endcsname{#1}{#2}{#3}%
+    }%
+    \iso@rangesign
+    \csname iso@printdate@\iso@languagename\endcsname{#4}{#5}{#6}%
+  }%
+}
+\expandafter\def\csname iso@rangesign@\CurrentOption\endcsname{~tot~}
+\def\iso@languagename{dutch}%
+\AtBeginDocument{%
+  \ifx\undefined\iso@datedutch\else
+    \def\datedutch{\iso@datedutch}%
+    \def\datedutch{\iso@datedutch}%
+  \fi
+}
+\endinput
+%%
+%% End of file `dutch.idf'.
